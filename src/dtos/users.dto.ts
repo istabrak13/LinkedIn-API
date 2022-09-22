@@ -1,4 +1,3 @@
-// eslint-disable-next-line max-classes-per-file
 import { Role } from '@prisma/client';
 import { IsEmail, IsString } from 'class-validator';
 
