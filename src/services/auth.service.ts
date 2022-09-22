@@ -11,28 +11,50 @@ import { omit } from 'radash';
 class AuthService {
   public users = new PrismaClient().user;
 
-  public async signup(userData: CreateUserDto): Promise<{ cookie: string; user: Omit<User, 'password'> }> {
+  public async signup(
+    userData: CreateUserDto,
+  ): Promise<{ cookie: string; user: Omit<User, 'password'> }> {
     if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
-    const findUser: User = await this.users.findUnique({ where: { email: userData.email } });
-    if (findUser) throw new HttpException(409, `This email ${userData.email} already exists`);
+    const findUser: User = await this.users.findUnique({
+      where: { email: userData.email },
+    });
+    if (findUser)
+      throw new HttpException(
+        409,
+        `This email ${userData.email} already exists`,
+      );
 
     const hashedPassword = await hash(userData.password, 10);
 
-    const user = await this.users.create({ data: { ...userData, password: hashedPassword } });
+    const user = await this.users.create({
+      data: { ...userData, password: hashedPassword },
+    });
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
     return { cookie, user };
   }
 
-  public async login(userData: CreateUserDto): Promise<{ cookie: string; findUser: Omit<User, 'password'> }> {
+  public async login(
+    userData: CreateUserDto,
+  ): Promise<{ cookie: string; findUser: Omit<User, 'password'> }> {
     if (isEmpty(userData)) throw new HttpException(400, 'userData is empty');
 
-    const findUser: User = await this.users.findUnique({ where: { email: userData.email } });
-    if (!findUser) throw new HttpException(409, `This email ${userData.email} was not found`);
+    const findUser: User = await this.users.findUnique({
+      where: { email: userData.email },
+    });
+    if (!findUser)
+      throw new HttpException(
+        409,
+        `This email ${userData.email} was not found`,
+      );
 
-    const isPasswordMatching: boolean = await compare(userData.password, findUser.password);
-    if (!isPasswordMatching) throw new HttpException(409, 'Password is not matching');
+    const isPasswordMatching: boolean = await compare(
+      userData.password,
+      findUser.password,
+    );
+    if (!isPasswordMatching)
+      throw new HttpException(409, 'Password is not matching');
 
     const tokenData = this.createToken(findUser);
     const cookie = this.createCookie(tokenData);
@@ -60,7 +82,10 @@ class AuthService {
     const secretKey: string = SECRET_KEY;
     const expiresIn: number = 60 * 60;
 
-    return { expiresIn, token: sign(dataStoredInToken, secretKey, { expiresIn }) };
+    return {
+      expiresIn,
+      token: sign(dataStoredInToken, secretKey, { expiresIn }),
+    };
   }
 
   public createCookie(tokenData: TokenData): string {
