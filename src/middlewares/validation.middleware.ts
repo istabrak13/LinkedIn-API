@@ -11,6 +11,7 @@ const validationMiddleware = (
   forbidNonWhitelisted = true,
 ): RequestHandler => {
   return (req, res, next) => {
+    // @ts-ignore
     validate(plainToClass(type, req[value]), {
       skipMissingProperties,
       whitelist,

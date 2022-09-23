@@ -61,7 +61,7 @@ class App {
     });
 
     this.app.use(async (req, res, next) => {
-      next(createError.NotFound('Route not Found'));
+      next(new createError.NotFound('Route not Found'));
     });
   }
 

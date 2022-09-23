@@ -1,16 +1,16 @@
 import { Router } from 'express';
-import UsersController from '@controllers/users.controller';
-import { CreateUserDto, UpdateUserDto } from '@dtos/users.dto';
 import { Routes } from '@interfaces/routes.interface';
 import validationMiddleware from '@middlewares/validation.middleware';
 import authMiddleware from '@middlewares/auth.middleware';
+import { CreatePostsDto } from '@dtos/posts.dto';
+import PostsController from '@controllers/posts.controller';
 
 class UsersRoute implements Routes {
-  public path = '/users';
+  public path = '/posts';
 
   public router = Router();
 
-  public usersController = new UsersController();
+  public postsController = new PostsController();
 
   constructor() {
     this.initializeRoutes();
@@ -20,29 +20,29 @@ class UsersRoute implements Routes {
     this.router.get(
       `${this.path}`,
       authMiddleware,
-      this.usersController.getUsers,
+      this.postsController.getPosts,
     );
     this.router.get(
       `${this.path}/:id(\\d+)`,
       authMiddleware,
-      this.usersController.getUserById,
+      this.postsController.getPostById,
     );
     this.router.post(
       `${this.path}`,
       authMiddleware,
-      validationMiddleware(CreateUserDto, 'body'),
-      this.usersController.createUser,
+      validationMiddleware(CreatePostsDto, 'body'),
+      this.postsController.createPost,
     );
     this.router.put(
       `${this.path}/:id(\\d+)`,
       authMiddleware,
-      validationMiddleware(UpdateUserDto, 'body', true),
-      this.usersController.updateUser,
+      validationMiddleware(CreatePostsDto, 'body'),
+      this.postsController.updatePost,
     );
     this.router.delete(
       `${this.path}/:id(\\d+)`,
       authMiddleware,
-      this.usersController.deleteUser,
+      this.postsController.deletePost,
     );
   }
 }
