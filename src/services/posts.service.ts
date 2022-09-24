@@ -1,19 +1,19 @@
-import { LinkedInPost, PrismaClient } from '@prisma/client';
+import { LinkedinPost, PrismaClient } from '@prisma/client';
 import { isEmpty } from '@utils/util';
 import createError from 'http-errors';
 import { CreatePostsDto } from '@dtos/posts.dto';
 
 class PostsService {
-  public posts = new PrismaClient().linkedInPost;
+  public posts = new PrismaClient().linkedinPost;
 
-  public async findAllPosts(): Promise<LinkedInPost[]> {
+  public async findAllPosts(): Promise<LinkedinPost[]> {
     return this.posts.findMany();
   }
 
-  public async findPostById(postId: number): Promise<LinkedInPost> {
+  public async findPostById(postId: number): Promise<LinkedinPost> {
     if (isEmpty(postId)) throw new createError.BadRequest('PostId is empty');
 
-    const findPost: LinkedInPost = await this.posts.findUnique({
+    const findPost: LinkedinPost = await this.posts.findUnique({
       where: { id: postId },
     });
 
@@ -22,7 +22,7 @@ class PostsService {
     return findPost;
   }
 
-  public async createPost(postData: CreatePostsDto): Promise<LinkedInPost> {
+  public async createPost(postData: CreatePostsDto): Promise<LinkedinPost> {
     if (isEmpty(postData))
       throw new createError.BadRequest('postData is empty');
 
@@ -40,11 +40,11 @@ class PostsService {
   public async updatePost(
     postId: number,
     postData: CreatePostsDto,
-  ): Promise<LinkedInPost> {
+  ): Promise<LinkedinPost> {
     if (isEmpty(postData))
       throw new createError.BadRequest('postData is empty');
 
-    const findPost: LinkedInPost = await this.posts.findUnique({
+    const findPost: LinkedinPost = await this.posts.findUnique({
       where: { id: postId },
     });
 
@@ -56,10 +56,10 @@ class PostsService {
     });
   }
 
-  public async deletePost(postId: number): Promise<LinkedInPost> {
+  public async deletePost(postId: number): Promise<LinkedinPost> {
     if (isEmpty(postId)) throw new createError.BadRequest('PostId is empty');
 
-    const findPost: LinkedInPost = await this.posts.findUnique({
+    const findPost: LinkedinPost = await this.posts.findUnique({
       where: { id: postId },
     });
     if (!findPost) throw new createError.NotFound("Post doesn't exist");
