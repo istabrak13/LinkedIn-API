@@ -1,6 +1,9 @@
-import { IsUrl } from 'class-validator';
+import { IsNumber, IsUrl } from 'class-validator';
 
 export class CreatePostsDto {
   @IsUrl()
   URL: string;
+
+  @IsNumber()
+  likesCount: number;
 }

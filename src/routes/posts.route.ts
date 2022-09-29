@@ -5,7 +5,7 @@ import authMiddleware from '@middlewares/auth.middleware';
 import { CreatePostsDto } from '@dtos/posts.dto';
 import PostsController from '@controllers/posts.controller';
 
-class UsersRoute implements Routes {
+class PostsRoute implements Routes {
   public path = '/posts';
 
   public router = Router();
@@ -47,4 +47,4 @@ class UsersRoute implements Routes {
   }
 }
 
-export default UsersRoute;
+export default PostsRoute;
